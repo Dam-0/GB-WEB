@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"go.bug.st/serial"
+	"go.bug.st/serial/enumerator"
 )
 
 var active_port = `none`
@@ -21,6 +22,7 @@ var Magenta = "\033[35m"
 var Cyan = "\033[36m" 
 var Gray = "\033[37m" 
 var White = "\033[97m"
+
 
 // clears terminal
 func clear_term() {
@@ -40,9 +42,14 @@ func check_for_serial_port() {
 		active_port = ports[0]
 
 	} else if len(ports) > 1 {
+		ports_detail, err := enumerator.GetDetailedPortsList()
+			if err != nil {
+				log.Fatal(err)
+				}
+
 		fmt.Printf("Ports Found: " + Green + "(%v)\n" + Reset, len(ports))
 		for _, port := range ports {
-			fmt.Printf("- %v\n", port)
+			fmt.Printf("- %v \n Extra: %v", port, ports_detail.Name)
 		}
 		fmt.Printf("Select a Port\n> ")
 
@@ -73,4 +80,16 @@ func main() {
 
 	fmt.Printf("Current Active Port: %v", active_port)
 
+	//mode := &serial.Mode{
+	//	BaudRate: 115200,
+	//	Parity: serial.EvenParity,
+	//	DataBits: 8,
+	//	StopBits: serial.OneStopBit,
+	//}
+
+	//port, err := serial.Open(active_port, mode)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//fmt.Println(port)
 }
