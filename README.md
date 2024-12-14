@@ -1,2 +1,5 @@
 # GB-WEB
-A web portal for GB mobile adpater connecttions via Serial (and wifi). Written in Golang
+A web portal for GB mobile adapter connections via serial (and wifi).
+
+// Current Progress
+* Dummy DNS feature (WIP) #Not Functional
