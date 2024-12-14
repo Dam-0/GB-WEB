@@ -2,15 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"slices"
-	"strings"
+	"flag"
 
-	"go.bug.st/serial"
-	"go.bug.st/serial/enumerator"
 )
-
-var active_port = `none`
 
 // For Coloured Text
 var Reset = "\033[0m" 
@@ -24,72 +18,48 @@ var Gray = "\033[37m"
 var White = "\033[97m"
 
 
+
+
 // clears terminal
 func clear_term() {
 	fmt.Print("\033[H\033[2J")
 }
 
-func check_for_serial_port() {
-	ports, err := serial.GetPortsList()
-	if err != nil {
-		log.Fatal(err)
-	}
-	if len(ports) == 0 {
-		log.Fatal("No serial ports found!")
+// Query
+func Query(name string, qtype int) (ip []byte) {
 
-	} else if len(ports) == 1 {
-		fmt.Println("Only " + Green + "1" + Reset + " Serial port found")
-		active_port = ports[0]
-
-	} else if len(ports) > 1 {
-		ports_detail, err := enumerator.GetDetailedPortsList()
-			if err != nil {
-				log.Fatal(err)
-				}
-
-		fmt.Printf("Ports Found: " + Green + "(%v)\n" + Reset, len(ports))
-		for _, port := range ports {
-			fmt.Printf("- %v \n Extra: %v", port, ports_detail.Name)
+	if qtype == 1 { // A (IPv4)
+		if name == "example.com" {
+			ip =[]byte{93, 184, 216, 34}
+		} else {
+			ip = []byte{127, 0, 0, 1}
 		}
-		fmt.Printf("Select a Port\n> ")
-
-		for {
-
-			fmt.Scan(&active_port) 
-
-			active_port = strings.ToUpper(active_port)
-			if slices.Contains(ports, active_port) {
-				break
-			} else {
-				clear_term()
-				fmt.Printf("Ports Found: " + Green + "(%v)\n" + Reset, len(ports))
-				for _, port := range ports {
-					fmt.Printf("- %v\n", port)
-				}
-
-				fmt.Println(Red + "Select a valid port" + Reset)
-				fmt.Print("> ")
-			}
+	} else if qtype == 28 { // AAAA (IPv6)
+		if name == "example.com" {
+			ip =[]byte{0x26, 0x06, 0x28, 0x00, 0x02, 0x20, 0x00, 0x01,0x02, 0x48, 0x18, 0x93, 0x25, 0xc8, 0x19, 0x46}
+		} else {
+			ip = []byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}
 		}
 	}
+	//fmt.Printf("%s = %d", name,ip)
+	return 
 }
 
+
 func main() {
-	clear_term()
-	check_for_serial_port()
 
-	fmt.Printf("Current Active Port: %v", active_port)
+	// Set Arguements 
+	DNS_port := flag.Int("DNS Port", 53, "an int")
 
-	//mode := &serial.Mode{
-	//	BaudRate: 115200,
-	//	Parity: serial.EvenParity,
-	//	DataBits: 8,
-	//	StopBits: serial.OneStopBit,
-	//}
+    flag.Parse()
 
-	//port, err := serial.Open(active_port, mode)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//fmt.Println(port)
+	fmt.Printf("Server: 127.0.0.1:%d \n",*DNS_port)
+
+	fmt.Println()
+
+	//test value
+	ip := Query("example.com", 1)
+
+	fmt.Printf("IP: %d", ip)
+
 }
