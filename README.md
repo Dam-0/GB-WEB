@@ -6,17 +6,15 @@ Dummy Servers based of [REON](https://github.com/REONTeam/dummy-servers) work. (
 HTTP Folder structur, is copied from [REON](https://github.com/REONTeam/dummy-servers) as well.
 
 
-Both DNS server and POP run at the same time.
-
-Should work on Windows, Linux and MacOS.
+Both DNS server and POP run at the same time. Should work on Windows, Linux and MacOS.
 
 // Current Progress (These should be working)
 * Dummy DNS (WIP)
 * Dummy Pop (WIP)
-
+* HTTP server (very basic features)
 
 // Todo
-* HTTP server (very basic features)
+* Maybe add more things
 
 
 // How to use
