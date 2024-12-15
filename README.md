@@ -2,10 +2,12 @@
 A web portal for GB mobile adapter connections via serial (and wifi). (not yet)
 
 Dummy Servers based of [REON](https://github.com/REONTeam/dummy-servers) work. (pretty much 1 for 1 atm)
+
 HTTP Folder structur, is copied from [REON](https://github.com/REONTeam/dummy-servers) as well.
 
 
 Both DNS server and POP run at the same time.
+
 Should work on Windows, Linux and MacOS.
 
 // Current Progress (These should be working)
