@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"time"
 )
@@ -21,7 +22,7 @@ var Cyan = "\033[36m"
 var Gray = "\033[37m" 
 var White = "\033[97m"
 
-func dns(port string) {
+func dns_server(port string) {
 
 	port = ":" + port
 
@@ -149,7 +150,7 @@ func read_name(data []byte, offset int) (string, int) {
 }
 
 
-func pop() {
+func pop_server() {
 
 	pop_listener, err := net.Listen("tcp", ":110")
 	if err != nil {
@@ -193,6 +194,20 @@ func pop() {
 	}
 }
 
+func http_server() {
+
+	port := ":80"
+
+	err := http.ListenAndServe(port, nil)
+	if err != nil {
+		fmt.Printf("Port:%s80%s is already use\n",Red,Reset)
+		os.Exit(1)
+	}
+	// Just a simple static page
+	http.Handle("/01/CGB-B9AJ/", http.StripPrefix("/01/CGB-B9AJ/", http.FileServer(http.Dir("./01/CGB-B9AJ/"))))
+	http.ListenAndServe(port, nil)
+}
+
 func main() {
 	// Channel for goroutine syncs
 	finish := make(chan bool)
@@ -205,12 +220,17 @@ func main() {
 	
 	// DNS Server
 	go func() {
-		dns(*dns_port)
+		dns_server(*dns_port)
 	} ()
 
 	// POP Server
 	go func() {
-		pop()
+		pop_server()
+	} ()
+
+	// HTTP Server
+	go func() {
+		http_server()
 	} ()
 
 	// Very Dirty Hack
@@ -218,6 +238,8 @@ func main() {
 
 	// Provide Information
 	fmt.Printf("DNS Server: 127.0.0.1:%s%s%s \n",Green,*dns_port,Reset)
+	fmt.Printf("HTTP Server: 127.0.0.1:%s80%s \n",Green,Reset)
+	fmt.Printf("POP Server: 127.0.0.1:%s110%s \n",Green,Reset)
 
 	<-finish // Routines to finish
 }
