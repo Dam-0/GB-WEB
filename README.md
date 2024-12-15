@@ -15,6 +15,7 @@ Both DNS server and POP run at the same time. Should work on Windows, Linux and 
 
 // Todo
 * Maybe add more things
+* Try implement relay server
 
 
 // How to use
