@@ -11,7 +11,7 @@ Both DNS server and POP run at the same time. Should work on Windows, Linux and 
 // Current Progress (These should be working)
 * Dummy DNS (WIP)
 * Dummy Pop (WIP)
-* HTTP server (very basic features)
+* HTTP server (very basic feature)
 
 // Todo
 * Maybe add more things
